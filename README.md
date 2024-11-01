@@ -73,4 +73,10 @@ npm run dev
 - TypeScript interfaces for type safety
 - Grouping utility functions for data organization
 
+## Screen-Shot
+<img width="1440" alt="Screen Shot 2024-11-01 at 5 52 25 PM" src="https://github.com/user-attachments/assets/a4580882-92d7-4f08-8683-007a63d49c86">
+
+
+
+
 
