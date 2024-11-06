@@ -19,4 +19,11 @@ export default defineConfig(({ command }) => ({
       ? JSON.stringify('/api/proxy')
       : JSON.stringify('https://krish4uu.github.io/api/proxy'),
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  }
 }));

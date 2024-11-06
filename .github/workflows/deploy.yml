@@ -16,17 +16,32 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Build proxy
+      - name: Build project
+        run: npm run build
+
+      - name: Create API folder in dist
         run: |
-          mkdir -p api
-          cat > api/proxy.js <<EOF
-          export default async function handler(req, res) {
+          mkdir -p dist/api
+          cat > dist/api/proxy.js <<EOF
+          const handler = async (req, res) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            
+            if (req.method === 'OPTIONS') {
+              res.status(200).end();
+              return;
+            }
+            
             try {
               const response = await fetch('https://wcz3qr33kmjvzotdqt65efniv40kokon.lambda-url.us-east-2.on.aws', {
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                 }
@@ -42,11 +57,10 @@ jobs:
               console.error('Error fetching data:', error);
               res.status(500).json({ error: 'Failed to fetch data' });
             }
-          }
-          EOF
+          };
 
-      - name: Build project
-        run: npm run build
+          export default handler;
+          EOF
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
